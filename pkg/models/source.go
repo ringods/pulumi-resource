@@ -1,4 +1,4 @@
-package config
+package models
 
 // Source contains all the rescource configuration attributes
 type Source struct {
