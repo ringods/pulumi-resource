@@ -54,3 +54,7 @@ func (r Runner) getPulumiPlatformUpdatesURL(req models.InRequest) (string, error
 	}
 	return b.String(), nil
 }
+
+func (r Runner) createResponseFromUpdates(updates models.Updates) models.InResponse {
+	return models.InResponse{}
+}

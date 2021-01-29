@@ -7,7 +7,4 @@ type InRequest struct {
 }
 
 // InResponse is the struct representing the JSON going out via stdout on `check` and `in` binaries
-type InResponse struct {
-	Version  Version  `json:"version"`
-	Metadata Metadata `json:"metadata"`
-}
+type InResponse = []Version
