@@ -1,0 +1,153 @@
+{
+    "updates": [
+        {
+            "info": {
+                "kind": "update",
+                "startTime": 1603658333,
+                "message": "Some comment on this succeeding change",
+                "environment": {
+                    "exec.kind": "cli",
+                    "git.author": "Ringo De Smet",
+                    "git.author.email": "my@email.com",
+                    "git.committer": "Ringo De Smet",
+                    "git.committer.email": "my@email.com",
+                    "git.dirty": "true",
+                    "git.head": "e092d2544fd61df8bef568d2a4deebb46b6aa59d",
+                    "git.headName": "refs/heads/master",
+                    "vcs.kind": "local.host.domain",
+                    "vcs.owner": "owner",
+                    "vcs.repo": "repository"
+                },
+                "config": {
+                },
+                "result": "succeeded",
+                "endTime": 1603658348,
+                "version": 79,
+                "resourceChanges": {
+                    "delete": 1,
+                    "same": 12
+                }
+            },
+            "updateID": "84049a7c-eb0c-4739-8fd8-ecd120712f0f",
+            "version": 79,
+            "latestVersion": 79,
+            "requestedBy": {
+                "name": "Ringo De Smet",
+                "githubLogin": "ringods",
+                "avatarUrl": "https://avatars.githubusercontent.com/u/77923?v=4"
+            }
+        },
+        {
+            "info": {
+                "kind": "update",
+                "startTime": 1603658244,
+                "message": "Some comment on this failing change",
+                "environment": {
+                    "exec.kind": "cli",
+                    "git.author": "Ringo De Smet",
+                    "git.author.email": "my@email.com",
+                    "git.committer": "Ringo De Smet",
+                    "git.committer.email": "my@email.com",
+                    "git.dirty": "true",
+                    "git.head": "e092d2544fd61df8bef568d2a4deebb46b6aa59d",
+                    "git.headName": "refs/heads/master",
+                    "vcs.kind": "local.host.domain",
+                    "vcs.owner": "owner",
+                    "vcs.repo": "repository"
+                },
+                "config": {
+                },
+                "result": "failed",
+                "endTime": 1603658255,
+                "version": 78,
+                "resourceChanges": {
+                    "delete": 1,
+                    "same": 12
+                }
+            },
+            "updateID": "a5fd7f46-68ca-4867-b12c-4cddff0bac9c",
+            "version": 78,
+            "latestVersion": 79,
+            "requestedBy": {
+                "name": "Ringo De Smet",
+                "githubLogin": "ringods",
+                "avatarUrl": "https://avatars.githubusercontent.com/u/77923?v=4"
+            }
+        },
+        {
+            "info": {
+                "kind": "update",
+                "startTime": 1603658173,
+                "message": "Some comment on this succeeding change",
+                "environment": {
+                    "exec.kind": "cli",
+                    "git.author": "Ringo De Smet",
+                    "git.author.email": "my@email.com",
+                    "git.committer": "Ringo De Smet",
+                    "git.committer.email": "my@email.com",
+                    "git.dirty": "true",
+                    "git.head": "e092d2544fd61df8bef568d2a4deebb46b6aa59d",
+                    "git.headName": "refs/heads/master",
+                    "vcs.kind": "local.host.domain",
+                    "vcs.owner": "owner",
+                    "vcs.repo": "repository"
+                },
+                "config": {
+                },
+                "result": "succeeded",
+                "endTime": 1603658184,
+                "version": 77,
+                "resourceChanges": {
+                    "delete": 1,
+                    "same": 12
+                }
+            },
+            "updateID": "d6532b60-2ab5-4c0b-94b4-45598c99b66c",
+            "version": 77,
+            "latestVersion": 79,
+            "requestedBy": {
+                "name": "Ringo De Smet",
+                "githubLogin": "ringods",
+                "avatarUrl": "https://avatars.githubusercontent.com/u/77923?v=4"
+            }
+        },
+        {
+            "info": {
+                "kind": "update",
+                "startTime": 1603658079,
+                "message": "Some comment on this succeeding change",
+                "environment": {
+                    "exec.kind": "cli",
+                    "git.author": "Ringo De Smet",
+                    "git.author.email": "my@email.com",
+                    "git.committer": "Ringo De Smet",
+                    "git.committer.email": "my@email.com",
+                    "git.dirty": "true",
+                    "git.head": "e092d2544fd61df8bef568d2a4deebb46b6aa59d",
+                    "git.headName": "refs/heads/master",
+                    "vcs.kind": "local.host.domain",
+                    "vcs.owner": "owner",
+                    "vcs.repo": "repository"
+                },
+                "config": {
+                },
+                "result": "succeeded",
+                "endTime": 1603658090,
+                "version": 76,
+                "resourceChanges": {
+                    "same": 12
+                }
+            },
+            "updateID": "c236cc92-090e-486f-b266-6741b91bc2a1",
+            "version": 76,
+            "latestVersion": 79,
+            "requestedBy": {
+                "name": "Ringo De Smet",
+                "githubLogin": "ringods",
+                "avatarUrl": "https://avatars.githubusercontent.com/u/77923?v=4"
+            }
+        }
+    ],
+    "itemsPerPage": 4,
+    "total": 79
+}

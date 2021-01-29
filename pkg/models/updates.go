@@ -9,6 +9,7 @@ type Updates struct {
 
 // Update contains the information of a series of stack updates
 type Update struct {
+	Info          Info   `json:"info"`
 	ID            string `json:"updateID"`
 	Version       int    `json:"version"`
 	LatestVersion int    `json:"latestVersion"`
