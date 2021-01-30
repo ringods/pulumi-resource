@@ -28,18 +28,13 @@ func (r Runner) Run(req models.InRequest) ([]models.Version, error) {
 }
 
 func (r Runner) getNewerVersions(req models.InRequest, client HttpClient) ([]models.Version, error) {
-	url, err := r.getPulumiPlatformUpdatesURL(req)
+	platformUpdates, err := r.getUpdatesFromPulumiPlatform(req, client)
 	if err != nil {
 		return []models.Version{}, err
 	}
+	response := r.createResponseFromUpdates(req, platformUpdates)
 
-	request, _ := http.NewRequest("GET", url, nil)
-	request.Header.Add("Authorization", "token "+req.Source.Token)
-	response, err := client.Do(request)
-	updates := models.Updates{}
-	err = json.NewDecoder(response.Body).Decode(&updates)
-
-	return []models.Version{}, nil
+	return response, nil
 }
 
 func (r Runner) getPulumiPlatformUpdatesURL(req models.InRequest) (string, error) {
@@ -55,6 +50,48 @@ func (r Runner) getPulumiPlatformUpdatesURL(req models.InRequest) (string, error
 	return b.String(), nil
 }
 
-func (r Runner) createResponseFromUpdates(updates models.Updates) models.InResponse {
-	return models.InResponse{}
+func (r Runner) getUpdatesFromPulumiPlatform(req models.InRequest, client HttpClient) (models.Updates, error) {
+	url, err := r.getPulumiPlatformUpdatesURL(req)
+	if err != nil {
+		return models.Updates{}, err
+	}
+
+	request, _ := http.NewRequest("GET", url, nil)
+	request.Header.Add("Authorization", "token "+req.Source.Token)
+	response, err := client.Do(request)
+	updates := models.Updates{}
+	err = json.NewDecoder(response.Body).Decode(&updates)
+
+	return updates, nil
 }
+
+func (r Runner) createResponseFromUpdates(req models.InRequest, updates models.Updates) []models.Version {
+	succesFullUpdates := filter(updates.Updates, func(update models.Update) bool {
+		return (update.Info.Result == "succeeded")
+	})
+	var newerVersions []models.Update
+	if req.Version.Update > 0 {
+		newerVersions = filter(succesFullUpdates, func(update models.Update) bool {
+			return (update.Version >= req.Version.Update)
+		})
+	} else {
+		newerVersions = succesFullUpdates
+	}
+	response := []models.Version{}
+	for _, v := range newerVersions {
+		response = append(response, models.Version{Update: v.Version})
+	}
+	return response
+}
+
+func filter(updates []models.Update, f filterFunc) []models.Update {
+	var filtered []models.Update
+	for _, update := range updates {
+		if f(update) {
+			filtered = append(filtered, update)
+		}
+	}
+	return filtered
+}
+
+type filterFunc func(models.Update) bool

@@ -42,7 +42,7 @@ func TestActualPulumiPlatformURL(t *testing.T) {
 	assert.Equal(t, "https://api.pulumi.com/api/stacks/ringods/mypulumiproject/production/updates?output-type=service&pageSize=10&page=1", url)
 }
 
-func TestGetNewerVersions(t *testing.T) {
+func TestGetNewerVersionsForNewStack(t *testing.T) {
 	client := &MockClient{
 		DoFunc: func(req *http.Request) (*http.Response, error) {
 			// do whatever you want
@@ -63,10 +63,50 @@ func TestGetNewerVersions(t *testing.T) {
 			Stack:        "production",
 			Token:        "pul-XXXXXXXXXXXXXXX",
 		},
+		Version: models.Version{
+			Update: 0,
+		},
 	}
 	versions, err := cmd.getNewerVersions(req, client)
+	// no error
 	assert.Equal(t, nil, err)
+	// No versions to return
+	assert.Equal(t, 0, len(versions))
 	assert.Equal(t, []models.Version{}, versions)
+}
+
+func TestGetNewerVersionsForNewStackWithUpdates(t *testing.T) {
+	jsonFile, err := os.Open("../models/updates.json")
+	client := &MockClient{
+		DoFunc: func(req *http.Request) (*http.Response, error) {
+			// do whatever you want
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Body:       ioutil.NopCloser(jsonFile),
+			}, nil
+		},
+	}
+
+	cmd := Runner{
+		LogWriter: os.Stderr,
+	}
+	req := models.InRequest{
+		Source: models.Source{
+			Organization: "ringods",
+			Project:      "mypulumiproject",
+			Stack:        "production",
+			Token:        "pul-XXXXXXXXXXXXXXX",
+		},
+		Version: models.Version{
+			Update: 0,
+		},
+	}
+	versions, err := cmd.getNewerVersions(req, client)
+	// no error
+	assert.Equal(t, nil, err)
+	// No versions to return
+	assert.Equal(t, 3, len(versions))
+	assert.Equal(t, []models.Version{{Update: 79}, {Update: 77}, {Update: 76}}, versions)
 }
 
 func readUpdatesFromFile(t *testing.T) models.Updates {
@@ -92,11 +132,20 @@ func readUpdatesFromFile(t *testing.T) models.Updates {
 }
 
 func TestCreateInResponseFromUpdates(t *testing.T) {
+	req := models.InRequest{
+		Source: models.Source{
+			Organization: "ringods",
+			Project:      "mypulumiproject",
+			Stack:        "production",
+			Token:        "pul-XXXXXXXXXXXXXXX",
+		},
+	}
+
 	updates := readUpdatesFromFile(t)
 
 	cmd := Runner{
 		LogWriter: os.Stderr,
 	}
-	response := cmd.createResponseFromUpdates(updates)
+	response := cmd.createResponseFromUpdates(req, updates)
 	assert.NotNil(t, response)
 }
