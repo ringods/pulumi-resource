@@ -106,7 +106,75 @@ func TestGetNewerVersionsForNewStackWithUpdates(t *testing.T) {
 	assert.Equal(t, nil, err)
 	// No versions to return
 	assert.Equal(t, 3, len(versions))
-	assert.Equal(t, []models.Version{{Update: 79}, {Update: 77}, {Update: 76}}, versions)
+	assert.Equal(t, []models.Version{{Update: 76}, {Update: 77}, {Update: 79}}, versions)
+}
+
+func TestGetNewerVersionsForExistingStackWithUpdates(t *testing.T) {
+	jsonFile, err := os.Open("../models/updates.json")
+	client := &MockClient{
+		DoFunc: func(req *http.Request) (*http.Response, error) {
+			// do whatever you want
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Body:       ioutil.NopCloser(jsonFile),
+			}, nil
+		},
+	}
+
+	cmd := Runner{
+		LogWriter: os.Stderr,
+	}
+	req := models.InRequest{
+		Source: models.Source{
+			Organization: "ringods",
+			Project:      "mypulumiproject",
+			Stack:        "production",
+			Token:        "pul-XXXXXXXXXXXXXXX",
+		},
+		Version: models.Version{
+			Update: 77,
+		},
+	}
+	versions, err := cmd.getNewerVersions(req, client)
+	// no error
+	assert.Equal(t, nil, err)
+	// No versions to return
+	assert.Equal(t, 2, len(versions))
+	assert.Equal(t, []models.Version{{Update: 77}, {Update: 79}}, versions)
+}
+
+func TestGetNewerVersionsForExistingStackWithoutUpdates(t *testing.T) {
+	jsonFile, err := os.Open("../models/updates.json")
+	client := &MockClient{
+		DoFunc: func(req *http.Request) (*http.Response, error) {
+			// do whatever you want
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Body:       ioutil.NopCloser(jsonFile),
+			}, nil
+		},
+	}
+
+	cmd := Runner{
+		LogWriter: os.Stderr,
+	}
+	req := models.InRequest{
+		Source: models.Source{
+			Organization: "ringods",
+			Project:      "mypulumiproject",
+			Stack:        "production",
+			Token:        "pul-XXXXXXXXXXXXXXX",
+		},
+		Version: models.Version{
+			Update: 79,
+		},
+	}
+	versions, err := cmd.getNewerVersions(req, client)
+	// no error
+	assert.Equal(t, nil, err)
+	// No versions to return
+	assert.Equal(t, 1, len(versions))
+	assert.Equal(t, []models.Version{{Update: 79}}, versions)
 }
 
 func readUpdatesFromFile(t *testing.T) models.Updates {

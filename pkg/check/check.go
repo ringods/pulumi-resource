@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"sort"
 	"text/template"
 
 	"github.com/ringods/pulumi-resource/pkg/models"
@@ -33,6 +34,9 @@ func (r Runner) getNewerVersions(req models.InRequest, client HttpClient) ([]mod
 		return []models.Version{}, err
 	}
 	response := r.createResponseFromUpdates(req, platformUpdates)
+	sort.Slice(response, func(i, j int) bool {
+		return response[i].Update < response[j].Update
+	})
 
 	return response, nil
 }
