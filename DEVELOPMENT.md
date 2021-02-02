@@ -85,7 +85,33 @@ This example shows that there are newer infrastructure updates. We may only trig
 
 ### in
 
-TODO
+The `in` binary for this resource type receives a JSON snippet via `stdin`:
+
+```json
+{
+  "source": {
+    "organization": "ringods",
+    "project": "mypulumicode",
+    "stack": "production",
+    "token": "pul-XXXXXXXXXXXXXXXXXXX"
+  },
+  "version": { "update": "44" }
+}
+```
+
+The `source` section is passed verbatim from the resource configuration in your Concourse pipeline.
+
+The `version` section returns the update revision of the stack
+which was deployed.
+
+The `in` binary will not do much at the moment besides returning the same version and an empty metadata array:
+
+```json
+{
+  "version": { "update": "44" },
+  "metadata": []
+}
+```
 
 ### out
 

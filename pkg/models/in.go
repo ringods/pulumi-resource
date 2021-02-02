@@ -5,3 +5,12 @@ type InRequest struct {
 	Source  Source  `json:"source"`
 	Version Version `json:"version,omitempty"` // absent on initial request
 }
+
+type MetadataEntry struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
+type InResponse struct {
+	Version  Version         `json:"version"`
+	Metadata []MetadataEntry `json:"metadata"`
+}
