@@ -16,3 +16,6 @@
 
 # Build output folder
 /bin
+
+# Goreleaser
+/dist

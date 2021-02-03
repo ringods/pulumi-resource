@@ -1,0 +1,63 @@
+before:
+  hooks:
+    - go mod download
+builds:
+  - main: ./cmd/check/main.go
+    id: "check"
+    binary: check
+    goos:
+      - linux
+    goarch:
+      - amd64
+  - main: ./cmd/in/main.go
+    id: "in"
+    binary: in
+    goos:
+      - linux
+    goarch:
+      - amd64
+  - main: ./cmd/out/main.go
+    id: "out"
+    binary: out
+    goos:
+      - linux
+    goarch:
+      - amd64
+archives:
+  - id: pulumi-resource
+    builds:
+    - check
+    - in
+    - out
+    format: tar.gz
+dockers:
+- ids:
+    - check
+    - in
+    - out
+  image_templates:
+  - 'ghcr.io/ringods/pulumi-resource:{{ .Tag }}-amd64'
+  dockerfile: Dockerfile
+  use_buildx: true
+  build_flag_templates:
+  - "--pull"
+  - "--label=org.opencontainers.image.created={{.Date}}"
+  - "--label=org.opencontainers.image.name={{.ProjectName}}"
+  - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+  - "--label=org.opencontainers.image.version={{.Version}}"
+  - "--label=org.opencontainers.image.source={{.GitURL}}"
+  - "--platform=linux/amd64"
+docker_manifests:
+- name_template: 'ghcr.io/ringods/pulumi-resource:{{ .Tag }}'
+  image_templates:
+  - 'ghcr.io/ringods/pulumi-resource:{{ .Tag }}-amd64'
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
