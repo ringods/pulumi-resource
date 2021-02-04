@@ -15,6 +15,12 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: "1.14.x"
+      - name: Docker Login
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GH_PAT }}
       - name: Goreleaser publish
         uses: goreleaser/goreleaser-action@v1
         with:
