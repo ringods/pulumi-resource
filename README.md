@@ -30,7 +30,7 @@ resource_types:
   type: docker-image
   source:
     repository: ghcr.io/ringods/pulumi-resource
-    tag: v0.0.5
+    tag: v0.0.6
 
 resources:
   - name: myinfracode
