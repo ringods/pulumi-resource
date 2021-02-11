@@ -115,4 +115,21 @@ The `in` binary will not do much at the moment besides returning the same versio
 
 ### out
 
-TODO
+The `out` binary for this resource type receives two things:
+
+* a path to the directory containing the build's full set of sources as command line argument `$1`
+* a JSON snippet via `stdin`:
+
+```json
+{
+  "source": {
+    "organization": "ringods",
+    "project": "mypulumicode",
+    "stack": "production",
+    "token": "pul-XXXXXXXXXXXXXXXXXXX"
+  },
+  "params": {
+    ...  
+  }
+}
+```
