@@ -37,6 +37,7 @@ dockers:
     - out
   image_templates:
   - 'ghcr.io/ringods/pulumi-resource:{{ .Tag }}-amd64'
+  - 'ghcr.io/ringods/pulumi-resource:latest-amd64'
   dockerfile: Dockerfile
   use_buildx: true
   build_flag_templates:
@@ -51,6 +52,9 @@ docker_manifests:
 - name_template: 'ghcr.io/ringods/pulumi-resource:{{ .Tag }}'
   image_templates:
   - 'ghcr.io/ringods/pulumi-resource:{{ .Tag }}-amd64'
+- name_template: 'ghcr.io/ringods/pulumi-resource:latest'
+  image_templates:
+  - 'ghcr.io/ringods/pulumi-resource:latest-amd64'
 checksum:
   name_template: 'checksums.txt'
 snapshot:
