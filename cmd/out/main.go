@@ -17,7 +17,8 @@ func main() {
 	}
 
 	cmd := out.Runner{
-		LogWriter: os.Stderr,
+		LogWriter:            os.Stderr,
+		PulumiSourceLocation: os.Args[1],
 	}
 	resp, err := cmd.Run(req)
 	if err != nil {
