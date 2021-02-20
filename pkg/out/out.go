@@ -42,11 +42,15 @@ func (r Runner) deployWithPulumi(req models.OutRequest) (models.OutResponse, err
 	// Set the Pulumi stack configuration. These values are usually in file `Pulumi.<stack>.yaml`
 	// stack.SetConfig(ctx, "key", auto.ConfigValue{Value: "value"})
 
-	_, err = stack.Up(ctx)
+	update, err := stack.Up(ctx)
 	if err != nil {
 		// TODO Add the update version here from the UpdateSummary
 		return models.OutResponse{}, errors.Wrap(err, "Failed to run `up`")
 	}
 
-	return models.OutResponse{}, nil
+	return models.OutResponse{
+		Version: models.Version{
+			Update: update.Summary.Version,
+		},
+	}, nil
 }
