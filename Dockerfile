@@ -1,4 +1,4 @@
-FROM pulumi/pulumi:v2.19.0
+FROM pulumi/pulumi:v2.21.0
 
 COPY check /opt/resource/check
 COPY in /opt/resource/in
