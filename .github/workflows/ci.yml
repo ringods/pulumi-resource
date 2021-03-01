@@ -16,7 +16,7 @@ jobs:
 
     steps:
     - name: Set up Go
-      uses: actions/setup-go@v1
+      uses: actions/setup-go@v2
       with:
         go-version: ${{ matrix.go }}
       id: go
@@ -25,3 +25,9 @@ jobs:
     - name: Run ${{matrix.make_target}}
       run: |
         make ${{ matrix.make_target }}
+    - name: Docker Login
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GH_PAT }}
