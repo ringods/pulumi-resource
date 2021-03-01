@@ -42,11 +42,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GH_PAT }}
-      # - name: Goreleaser publish
-      #   uses: goreleaser/goreleaser-action@v1
-      #   with:
-      #     version: v0.155.0
-      #     args: release --rm-dist
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-      #     DOCKER_CLI_EXPERIMENTAL: enabled
+      - name: Goreleaser publish
+        uses: goreleaser/goreleaser-action@v1
+        with:
+          version: v0.155.0
+          args: release -f .goreleaser-dev.yml --rm-dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          DOCKER_CLI_EXPERIMENTAL: enabled
