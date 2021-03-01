@@ -25,6 +25,7 @@ jobs:
       run: |
         make ${{ matrix.make_target }}
   goreleaser:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
