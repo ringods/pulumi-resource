@@ -1,5 +1,8 @@
-name: Unit Tests
-on: [push,pull_request]
+name: CI
+on:
+  push:
+    branches: 
+    - master
 
 jobs:
   test:
@@ -7,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        go: [1.14]
+        go: [1.15]
         os: [ubuntu-latest, windows-latest]
         make_target: [build, test]
 
@@ -17,10 +20,8 @@ jobs:
       with:
         go-version: ${{ matrix.go }}
       id: go
-
     - name: Check out code repository source code
       uses: actions/checkout@v2
-
     - name: Run ${{matrix.make_target}}
       run: |
         make ${{ matrix.make_target }}

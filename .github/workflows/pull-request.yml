@@ -1,0 +1,24 @@
+name: Pull Request
+on: [pull_request]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        go: [1.15]
+        os: [ubuntu-latest, windows-latest]
+        make_target: [build, test]
+
+    steps:
+    - name: Set up Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: ${{ matrix.go }}
+      id: go
+    - name: Check out code repository source code
+      uses: actions/checkout@v2
+    - name: Run ${{matrix.make_target}}
+      run: |
+        make ${{ matrix.make_target }}
