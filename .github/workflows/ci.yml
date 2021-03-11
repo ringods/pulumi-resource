@@ -53,4 +53,4 @@ jobs:
       - name: Push development image
         run: |
           docker image tag ghcr.io/ringods/pulumi-resource:dev-amd64 ghcr.io/ringods/pulumi-resource:dev
-          docker push --all-tags ghcr.io/ringods/pulumi-resource:dev-amd64
+          docker push --all-tags ghcr.io/ringods/pulumi-resource
