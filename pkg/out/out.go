@@ -40,7 +40,7 @@ func (r Runner) deployWithPulumi(req models.OutRequest) (models.OutResponse, err
 		return models.OutResponse{}, errors.Wrap(err, "Failed to create the stack")
 	}
 	// Set the Pulumi stack configuration. These values are usually in file `Pulumi.<stack>.yaml`
-	//stack.SetAllConfig(ctx, configMap)
+	stack.SetAllConfig(ctx, req.GetConfigMap())
 
 	update, err := stack.Up(ctx)
 	if err != nil {
