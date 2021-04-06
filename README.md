@@ -15,37 +15,60 @@ Only file a new Github issue when you are really sure there is a bug.
 ## Source Configuration
 
 * `organization`: *Required.* The name of the organization you use on the Pulumi platform.
-
 * `project`: *Required.* The name of your Pulumi project.
-
 * `stack`: *Required.* Name of the stack to manage, e.g. `staging`.
+* `token`: *Required.* Access token which will be used to login on the Pulumi platform. Use the Concourse [Credential Management](https://concourse-ci.org/creds.html) to keep your token safe.
 
-* `token`: *Required.* Access token which will be used to login on the Pulumi platform.
-
-#### Source Example
+#### Full Example
 
 ```yaml
 resource_types:
 - name: pulumi
-  type: docker-image
+  type: registry-image
   source:
     repository: ghcr.io/ringods/pulumi-resource
     tag: v0.0.6
 
 resources:
-  - name: myinfracode
-    type: pulumi
-    source:
-      organization: companyname
-      project: network
-      stack: staging
-      token: pul-XXXXXXXXXXXXXXXXX
+- name: nodejs14
+  type: registry-image
+  source:
+    repository: node
+
+- name: myinfracode
+  type: git
+  uri: git@github.com:owner/myinfracode.git
+    branch: master
+
+- name: myinfra
+  type: pulumi
+  source:
+    organization: companyname
+    project: network
+    stack: staging
+    token: pul-XXXXXXXXXXXXXXXXX
 
 jobs:
-  - name: nextstack
-    plan:
-      - get: myinfracode
-        trigger: true
-      - task: do-something-after-rolling-out-network-stack
-        ...
+- name: update-infra
+  plan:
+  - get: myinfracode
+    trigger: true
+  - task:
+    image: nodejs14
+    input_mapping: { code: myinfracode }
+    file: code/npm-install.yml
+  - put: myinfra
+    params:
+      runtime: nodejs14
+      sources: code
+      config:
+        network:setting1: value1
+        network:setting2: value2
+
+- name: after-update-infra
+  plan:
+  - get: myinfra
+    trigger: true
+  - task: do-something-after-rolling-out-network-stack
+    ...
 ```
