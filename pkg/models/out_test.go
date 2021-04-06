@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/pulumi/pulumi/sdk/v2/go/common/resource/config"
+	"github.com/pulumi/pulumi/sdk/v2/go/x/auto"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -72,4 +73,47 @@ func TestDecodeOutRequestWithStructuredConfig(t *testing.T) {
 	assert.NotNil(t, request.Params)
 	assert.NotEmpty(t, request.Params)
 	assert.Equal(t, expected, request.Params)
+}
+
+func TestGetConfigMapFlatParamsList(t *testing.T) {
+	jsonRequest := []byte("{ \"source\": " + source + ", \"params\": { \"proj:key1\": \"value1\", \"proj:key2\": \"value2\" }}")
+	request := OutRequest{}
+	if err := json.Unmarshal(jsonRequest, &request); err != nil {
+		assert.Fail(t, "Failed to unmarshal to OutRequest: %s", err)
+	}
+
+	expected := auto.ConfigMap{"proj:key1": auto.ConfigValue{Value: "value1", Secret: false}, "proj:key2": auto.ConfigValue{Value: "value2"}}
+
+	assert.NotNil(t, request)
+	assert.NotNil(t, request.Params)
+	assert.NotEmpty(t, request.Params)
+	assert.Equal(t, expected, request.GetConfigMap())
+}
+func TestGetConfigMapFlatParamsListMixedTypes(t *testing.T) {
+	jsonRequest := []byte("{ \"source\": " + source + ", \"params\": { \"proj:key1\": \"value1\", \"proj:key2\": 2 }}")
+	request := OutRequest{}
+	if err := json.Unmarshal(jsonRequest, &request); err != nil {
+		assert.Fail(t, "Failed to unmarshal to OutRequest: %s", err)
+	}
+
+	expected := auto.ConfigMap{"proj:key1": auto.ConfigValue{Value: "value1", Secret: false}, "proj:key2": auto.ConfigValue{Value: "2"}}
+
+	assert.NotNil(t, request)
+	assert.NotNil(t, request.Params)
+	assert.NotEmpty(t, request.Params)
+	assert.Equal(t, expected, request.GetConfigMap())
+}
+func TestGetConfigMapStructuredConfig(t *testing.T) {
+	jsonRequest := []byte("{ \"source\": " + source + ", \"params\": { \"proj:data\": {\"active\":true, \"nums\": [ 1, 2, 3 ] } }}")
+	request := OutRequest{}
+	if err := json.Unmarshal(jsonRequest, &request); err != nil {
+		assert.Fail(t, "Failed to unmarshal to OutRequest: %s", err)
+	}
+
+	expected := auto.ConfigMap{"proj:data": auto.ConfigValue{Value: "{\"active\":true,\"nums\":[1,2,3]}", Secret: false}}
+
+	assert.NotNil(t, request)
+	assert.NotNil(t, request.Params)
+	assert.NotEmpty(t, request.Params)
+	assert.Equal(t, expected, request.GetConfigMap())
 }
