@@ -19,3 +19,7 @@
 
 # Goreleaser
 /dist
+
+# Local test setup
+/test
+/test-stack
