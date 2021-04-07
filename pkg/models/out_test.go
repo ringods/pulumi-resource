@@ -22,11 +22,11 @@ func TestDecodeOutRequestWithoutParams(t *testing.T) {
 	assert.NotNil(t, request)
 	assert.NotNil(t, request.Params)
 	assert.Empty(t, request.Params)
-	assert.Equal(t, config.Map{}, request.Params)
+	assert.Equal(t, OutParams{}, request.Params)
 }
 
 func TestDecodeOutRequestWithFlatParamsList(t *testing.T) {
-	jsonRequest := []byte("{ \"source\": " + source + ", \"params\": { \"proj:key1\": \"value1\", \"proj:key2\": \"value2\" }}")
+	jsonRequest := []byte("{ \"source\": " + source + ", \"params\": { \"config\": { \"proj:key1\": \"value1\", \"proj:key2\": \"value2\" }}}")
 	request := OutRequest{}
 	if err := json.Unmarshal(jsonRequest, &request); err != nil {
 		assert.Fail(t, "Failed to unmarshal to OutRequest: %s", err)
@@ -39,11 +39,11 @@ func TestDecodeOutRequestWithFlatParamsList(t *testing.T) {
 	assert.NotNil(t, request)
 	assert.NotNil(t, request.Params)
 	assert.NotEmpty(t, request.Params)
-	assert.Equal(t, expected, request.Params)
+	assert.Equal(t, expected, request.Params.Config)
 }
 
 func TestDecodeOutRequestWithFlatParamsListMixedTypes(t *testing.T) {
-	jsonRequest := []byte("{ \"source\": " + source + ", \"params\": { \"proj:key1\": \"value1\", \"proj:key2\": 2 }}")
+	jsonRequest := []byte("{ \"source\": " + source + ", \"params\": { \"config\": { \"proj:key1\": \"value1\", \"proj:key2\": 2 }}}")
 	request := OutRequest{}
 	if err := json.Unmarshal(jsonRequest, &request); err != nil {
 		assert.Fail(t, "Failed to unmarshal to OutRequest: %s", err)
@@ -56,11 +56,11 @@ func TestDecodeOutRequestWithFlatParamsListMixedTypes(t *testing.T) {
 	assert.NotNil(t, request)
 	assert.NotNil(t, request.Params)
 	assert.NotEmpty(t, request.Params)
-	assert.Equal(t, expected, request.Params)
+	assert.Equal(t, expected, request.Params.Config)
 }
 
 func TestDecodeOutRequestWithStructuredConfig(t *testing.T) {
-	jsonRequest := []byte("{ \"source\": " + source + ", \"params\": { \"proj:data\": {\"active\":true, \"nums\": [ 1, 2, 3 ] } }}")
+	jsonRequest := []byte("{ \"source\": " + source + ", \"params\": { \"config\": { \"proj:data\": {\"active\":true, \"nums\": [ 1, 2, 3 ] } }}}")
 	request := OutRequest{}
 	if err := json.Unmarshal(jsonRequest, &request); err != nil {
 		assert.Fail(t, "Failed to unmarshal to OutRequest: %s", err)
@@ -72,11 +72,11 @@ func TestDecodeOutRequestWithStructuredConfig(t *testing.T) {
 	assert.NotNil(t, request)
 	assert.NotNil(t, request.Params)
 	assert.NotEmpty(t, request.Params)
-	assert.Equal(t, expected, request.Params)
+	assert.Equal(t, expected, request.Params.Config)
 }
 
 func TestGetConfigMapFlatParamsList(t *testing.T) {
-	jsonRequest := []byte("{ \"source\": " + source + ", \"params\": { \"proj:key1\": \"value1\", \"proj:key2\": \"value2\" }}")
+	jsonRequest := []byte("{ \"source\": " + source + ", \"params\": { \"config\": { \"proj:key1\": \"value1\", \"proj:key2\": \"value2\" }}}")
 	request := OutRequest{}
 	if err := json.Unmarshal(jsonRequest, &request); err != nil {
 		assert.Fail(t, "Failed to unmarshal to OutRequest: %s", err)
@@ -90,7 +90,7 @@ func TestGetConfigMapFlatParamsList(t *testing.T) {
 	assert.Equal(t, expected, request.GetConfigMap())
 }
 func TestGetConfigMapFlatParamsListMixedTypes(t *testing.T) {
-	jsonRequest := []byte("{ \"source\": " + source + ", \"params\": { \"proj:key1\": \"value1\", \"proj:key2\": 2 }}")
+	jsonRequest := []byte("{ \"source\": " + source + ", \"params\": { \"config\": { \"proj:key1\": \"value1\", \"proj:key2\": 2 }}}")
 	request := OutRequest{}
 	if err := json.Unmarshal(jsonRequest, &request); err != nil {
 		assert.Fail(t, "Failed to unmarshal to OutRequest: %s", err)
@@ -104,7 +104,7 @@ func TestGetConfigMapFlatParamsListMixedTypes(t *testing.T) {
 	assert.Equal(t, expected, request.GetConfigMap())
 }
 func TestGetConfigMapStructuredConfig(t *testing.T) {
-	jsonRequest := []byte("{ \"source\": " + source + ", \"params\": { \"proj:data\": {\"active\":true, \"nums\": [ 1, 2, 3 ] } }}")
+	jsonRequest := []byte("{ \"source\": " + source + ", \"params\": { \"config\": { \"proj:data\": {\"active\":true, \"nums\": [ 1, 2, 3 ] } }}}")
 	request := OutRequest{}
 	if err := json.Unmarshal(jsonRequest, &request); err != nil {
 		assert.Fail(t, "Failed to unmarshal to OutRequest: %s", err)
