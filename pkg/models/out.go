@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fmt"
+
 	"github.com/pulumi/pulumi/sdk/v2/go/common/resource/config"
 	"github.com/pulumi/pulumi/sdk/v2/go/x/auto"
 )
@@ -34,4 +36,15 @@ func (req *OutRequest) GetConfigMap() auto.ConfigMap {
 		cfgMap[key.String()] = auto.ConfigValue{Value: v}
 	}
 	return cfgMap
+}
+
+// ExtendPathWithRuntime extends the PATH env value by adding paths to the runtime binaries
+func (req *OutRequest) ExtendPathWithRuntime(currentPath string) string {
+	// Add these paths:
+	// ./${runtime}/bin
+	// ./${runtime}/usr/bin
+	// ./${runtime}/usr/local/bin
+	extension := fmt.Sprintf("./%s/bin:./%s/usr/bin:./%s/usr/local/bin", req.Params.Runtime, req.Params.Runtime, req.Params.Runtime)
+
+	return fmt.Sprintf("%s:%s", currentPath, extension)
 }

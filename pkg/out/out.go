@@ -4,6 +4,7 @@ import (
 	"context"
 	"io"
 	"net/http"
+	"os"
 
 	"github.com/pkg/errors"
 	"github.com/pulumi/pulumi/sdk/v2/go/x/auto"
@@ -39,6 +40,7 @@ func (r Runner) deployWithPulumi(req models.OutRequest) (models.OutResponse, err
 	if err != nil {
 		return models.OutResponse{}, errors.Wrap(err, "Failed to create the stack")
 	}
+	stack.Workspace().SetEnvVar("PATH", req.ExtendPathWithRuntime(os.Getenv("PATH")))
 	// Set the Pulumi stack configuration. These values are usually in file `Pulumi.<stack>.yaml`
 	stack.SetAllConfig(ctx, req.GetConfigMap())
 
