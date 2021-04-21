@@ -2,7 +2,6 @@ package out
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -37,13 +36,19 @@ func (r Runner) deployWithPulumi(req models.OutRequest) (models.OutResponse, err
 	stackName := auto.FullyQualifiedStackName(req.Source.Organization, projectName, req.Source.Stack)
 
 	// initialize a stack from the checked out sources
-	stack, err := auto.UpsertStackLocalSource(ctx, stackName, r.PulumiSourceLocation) // TODO when to run `npm install` here
+	stack, err := auto.UpsertStackLocalSource(
+		ctx,
+		stackName,
+		r.PulumiSourceLocation,
+		auto.EnvVars(map[string]string{
+			"PULUMI_ACCESS_TOKEN": req.Source.Token,
+			"PATH":                req.ExtendPathWithRuntime(os.Getenv("PATH")),
+		}),
+	)
 	if err != nil {
 		return models.OutResponse{}, errors.Wrap(err, "Failed to create the stack")
 	}
-	stack.Workspace().SetEnvVar("PULUMI_ACCESS_TOKEN", req.Source.Token)
-	stack.Workspace().SetEnvVar("PULUMI_BACKEND_URL", fmt.Sprintf("https://app.pulumi.com/%s", req.Source.Organization))
-	stack.Workspace().SetEnvVar("PATH", req.ExtendPathWithRuntime(os.Getenv("PATH")))
+
 	// Set the Pulumi stack configuration. These values are usually in file `Pulumi.<stack>.yaml`
 	stack.SetAllConfig(ctx, req.GetConfigMap())
 
