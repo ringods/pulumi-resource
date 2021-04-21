@@ -2,6 +2,7 @@ package out
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -41,6 +42,7 @@ func (r Runner) deployWithPulumi(req models.OutRequest) (models.OutResponse, err
 		return models.OutResponse{}, errors.Wrap(err, "Failed to create the stack")
 	}
 	stack.Workspace().SetEnvVar("PULUMI_ACCESS_TOKEN", req.Source.Token)
+	stack.Workspace().SetEnvVar("PULUMI_BACKEND_URL", fmt.Sprintf("https://app.pulumi.com/%s", req.Source.Organization))
 	stack.Workspace().SetEnvVar("PATH", req.ExtendPathWithRuntime(os.Getenv("PATH")))
 	// Set the Pulumi stack configuration. These values are usually in file `Pulumi.<stack>.yaml`
 	stack.SetAllConfig(ctx, req.GetConfigMap())
