@@ -8,6 +8,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/pulumi/pulumi/sdk/v2/go/x/auto"
+	"github.com/pulumi/pulumi/sdk/v2/go/x/auto/optup"
 	"github.com/ringods/pulumi-resource/pkg/models"
 )
 
@@ -52,7 +53,8 @@ func (r Runner) deployWithPulumi(req models.OutRequest) (models.OutResponse, err
 	// Set the Pulumi stack configuration. These values are usually in file `Pulumi.<stack>.yaml`
 	stack.SetAllConfig(ctx, req.GetConfigMap())
 
-	update, err := stack.Up(ctx)
+	// Any output sent to stderr is displayed in the Concourse web console
+	update, err := stack.Up(ctx, optup.ProgressStreams(os.Stderr))
 	if err != nil {
 		// TODO Add the update version here from the UpdateSummary
 		return models.OutResponse{}, errors.Wrap(err, "Failed to run `up`")
