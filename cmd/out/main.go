@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 
@@ -12,12 +11,6 @@ import (
 )
 
 func main() {
-	currentWorkingDirectory, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Fprintf(os.Stderr, "Current working directory: %s", currentWorkingDirectory)
-
 	req := models.OutRequest{}
 	if err := json.NewDecoder(os.Stdin).Decode(&req); err != nil {
 		log.Fatalf("Failed to read OutRequest: %s", err)
