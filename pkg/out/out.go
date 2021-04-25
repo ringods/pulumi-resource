@@ -13,7 +13,7 @@ import (
 
 type Runner struct {
 	LogWriter            io.Writer
-	PulumiSourceLocation string
+	ConcourseBuildFolder string
 }
 
 type HttpClient interface {
@@ -39,10 +39,10 @@ func (r Runner) deployWithPulumi(req models.OutRequest) (models.OutResponse, err
 	stack, err := auto.UpsertStackLocalSource(
 		ctx,
 		stackName,
-		r.PulumiSourceLocation,
+		req.GetSourceLocation(r.ConcourseBuildFolder),
 		auto.EnvVars(map[string]string{
 			"PULUMI_ACCESS_TOKEN": req.Source.Token,
-			"PATH":                req.ExtendPathWithRuntime(os.Getenv("PATH")),
+			"PATH":                req.ExtendPathWithRuntime(r.ConcourseBuildFolder, os.Getenv("PATH")),
 		}),
 	)
 	if err != nil {

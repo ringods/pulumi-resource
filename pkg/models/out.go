@@ -39,12 +39,18 @@ func (req *OutRequest) GetConfigMap() auto.ConfigMap {
 }
 
 // ExtendPathWithRuntime extends the PATH env value by adding paths to the runtime binaries
-func (req *OutRequest) ExtendPathWithRuntime(currentPath string) string {
-	// Add these paths:
-	// ./${runtime}/bin
-	// ./${runtime}/usr/bin
-	// ./${runtime}/usr/local/bin
-	extension := fmt.Sprintf("./%s/bin:./%s/usr/bin:./%s/usr/local/bin", req.Params.Runtime, req.Params.Runtime, req.Params.Runtime)
+func (req *OutRequest) ExtendPathWithRuntime(buildDirectory string, currentPathEnv string) string {
+	// Prepend these paths:
+	// ${buildDirectory}/${runtime}/rootfs/bin
+	// ${buildDirectory}/${runtime}/rootfs/usr/bin
+	// ${buildDirectory}/${runtime}/rootfs/usr/local/bin
+	baseExtension := fmt.Sprintf("%s/%s/rootfs", buildDirectory, req.Params.Runtime)
+	extension := fmt.Sprintf("%s/bin:%s/usr/bin:%s/usr/local/bin", baseExtension, baseExtension, baseExtension)
 
-	return fmt.Sprintf("%s:%s", currentPath, extension)
+	return fmt.Sprintf("%s:%s", extension, currentPathEnv)
+}
+
+// GetSourceLocation calculates the Concourse specific path the to Pulumi sources.
+func (req *OutRequest) GetSourceLocation(buildDirectory string) string {
+	return fmt.Sprintf("%s/%s", buildDirectory, req.Params.Sources)
 }
