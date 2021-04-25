@@ -2,7 +2,7 @@
 
 A [Concourse](http://concourse-ci.org/) resource type that allows jobs to modify IaaS resources via [Pulumi](https://www.pulumi.com/). This resource will work against the Pulumi hosted platform. Cloud based state storage backends are not supported by this resource.
 
-*NOTE:* This resource is currently under development and isn't yet fully functional. As of v0.0.5, it should be usable to function as an resource you can `get`. `put` is under development.
+*NOTE:* This resource is currently under development and might still contain some bugs. As of v0.0.5, it should be usable to function as an resource you can `get`. The first version of `put` became available since v0.1.0.
 
 ## Community
 
@@ -27,7 +27,7 @@ resource_types:
   type: registry-image
   source:
     repository: ghcr.io/ringods/pulumi-resource
-    tag: v0.0.6
+    tag: v0.1.0
 
 resources:
 - name: nodejs14
