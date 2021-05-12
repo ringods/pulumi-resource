@@ -7,8 +7,8 @@ import (
 	"os"
 
 	"github.com/pkg/errors"
-	"github.com/pulumi/pulumi/sdk/v2/go/x/auto"
-	"github.com/pulumi/pulumi/sdk/v2/go/x/auto/optup"
+	"github.com/pulumi/pulumi/sdk/v3/go/auto"
+	"github.com/pulumi/pulumi/sdk/v3/go/auto/optup"
 	"github.com/ringods/pulumi-resource/pkg/models"
 )
 
