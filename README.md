@@ -2,8 +2,7 @@
 
 A [Concourse](http://concourse-ci.org/) resource type that allows jobs to modify IaaS resources via [Pulumi](https://www.pulumi.com/). This resource will work against the Pulumi hosted platform. Cloud based state storage backends are not supported by this resource.
 
-*NOTE:* This resource is currently under development and might still contain some bugs. Version 0.1.0 is the single version compatible with Pulumi 2.x. Version 0.2.0 is functionally the same but
-is upgraded to work with Pulumi 3.x.
+*NOTE:* This resource is currently under development and might still contain some bugs. Use at least v0.3.1, in combination with a Pulumi 3.x based project. All previous development versions are unsupported.
 
 ## Community
 
@@ -25,7 +24,7 @@ resource_types:
   type: registry-image
   source:
     repository: ghcr.io/ringods/pulumi-resource
-    tag: v0.2.0
+    tag: v0.3.1
 ```
 
 Concourse will now know about the resource type called `pulumi` in your list of resources.
@@ -100,6 +99,8 @@ Let's show this at work with an example of a NodeJS based Pulumi stack:
 
 #### Example
 
+Pipeline file:
+
 ```yaml
 resources:
 - name: nodejs14
@@ -139,7 +140,30 @@ jobs:
         network:setting2: value2
 ```
 
+The example task file:
+
+```yaml
+---
+platform: linux
+
+inputs:
+- name: code
+
+outputs:
+- name: code
+
+run:
+  path: /bin/bash
+  args:
+    - -c
+    - |
+      set -euo pipefail
+      cd ./code
+      npm ci
+```
+
 The resources section contains 3 resources:
+
 * `nodejs14`: a container image for NodeJS 14 and support tools like npm or yarn.
   You can configures this fully to your liking.
 * `myinfracode`: a git resource pointing to your Pulumi code in a git repository, 
@@ -147,10 +171,12 @@ The resources section contains 3 resources:
 * `my-staging-network`: the pulumi resource pointing to our staging network stack.
 
 We then create a job which does 4 steps:
+
 * retrieves the new revision of the code in the `get: myinfracode` step.
 * fetches your NodeJS runtime image in the `get: nodejs14` step. Do not forget to `get` your runtime
   image in the job. If you forget this step, you will not have it available in your `put` step.
 * runs `npm install` first on the retrieved code using the `nodejs14` image as the container
+* pass your modified sources as an output. If you don't do this and pass your sources using your `get` resource, you still have your clean sources.
 * runs Pulumi (via the Automation API) on your code, using the provided runtime image. The stack config
   set via the Concourse pipeline is mixed with any config already provided in the `Pulumi.<stack>.yaml` file residing in the source repository
 
