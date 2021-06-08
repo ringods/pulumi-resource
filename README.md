@@ -129,7 +129,7 @@ jobs:
   - task: npm-install
     image: nodejs14
     input_mapping: { code: myinfracode }
-    file: code/npm-install.yml
+    file: myinfracode/npm-install.yml
   - put: my-staging-network
     params:
       runtime: nodejs14
@@ -140,6 +140,7 @@ jobs:
 ```
 
 The resources section contains 3 resources:
+
 * `nodejs14`: a container image for NodeJS 14 and support tools like npm or yarn.
   You can configures this fully to your liking.
 * `myinfracode`: a git resource pointing to your Pulumi code in a git repository, 
@@ -147,6 +148,7 @@ The resources section contains 3 resources:
 * `my-staging-network`: the pulumi resource pointing to our staging network stack.
 
 We then create a job which does 4 steps:
+
 * retrieves the new revision of the code in the `get: myinfracode` step.
 * fetches your NodeJS runtime image in the `get: nodejs14` step. Do not forget to `get` your runtime
   image in the job. If you forget this step, you will not have it available in your `put` step.
@@ -194,7 +196,7 @@ jobs:
   - task:
     image: nodejs14
     input_mapping: { code: myinfracode }
-    file: code/npm-install.yml
+    file: myinfracode/npm-install.yml
   - put: my-staging-network
     params:
       runtime: nodejs14
