@@ -94,6 +94,7 @@ type is implemented in a way that you can pass your custom runtime image via con
 * `sources`: should point to an input retrieved via `get` or to an `output` from a previous step.
 * `config`: this section may contain any valid configuration which you would normally put in your
   `Pulumi.<stack>.yaml` file. Secrets are *not yet* supported.
+* `env`: this section may contain environment variables which are needed. E.g., for authentication
 
 Let's show this at work with an example of a NodeJS based Pulumi stack:
 
@@ -138,6 +139,15 @@ jobs:
       config:
         network:setting1: value1
         network:setting2: value2
+      env:
+        CLOUD_PROVIDER_CREDENTIALS: |
+          {
+            "private_key_id": "<private key id string>",
+            "private_key": "<private key string here>",
+            ...
+          }
+        CLOUD_PROVIDER_REGION: value1
+        CLOUD_PROVIDER_ZONE: value2
 ```
 
 The example task file:
@@ -228,6 +238,15 @@ jobs:
       config:
         network:setting1: value1
         network:setting2: value2
+      env:
+        CLOUD_PROVIDER_CREDENTIALS: |
+          {
+            "private_key_id": "<private key id string>",
+            "private_key": "<private key string here>",
+            ...
+          }
+        CLOUD_PROVIDER_REGION: value1
+        CLOUD_PROVIDER_ZONE: value2
 
 - name: after-update-infra
   plan:
