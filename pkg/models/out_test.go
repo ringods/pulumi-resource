@@ -117,3 +117,17 @@ func TestGetConfigMapStructuredConfig(t *testing.T) {
 	assert.NotEmpty(t, request.Params)
 	assert.Equal(t, expected, request.GetConfigMap())
 }
+func TestDecodeOutRequestWithEnvList(t *testing.T) {
+	jsonRequest := []byte("{ \"source\": " + source + ", \"params\": { \"env\": { \"VARIABLE_1\": \"value1\" , \"VARIABLE_2\": \"value2\"}}}")
+	request := OutRequest{}
+	if err := json.Unmarshal(jsonRequest, &request); err != nil {
+		assert.Fail(t, "Failed to unmarshal to OutRequest: %s", err)
+	}
+
+	expected := map[string]string{"VARIABLE_1": "value1", "VARIABLE_2": "value2"}
+
+	assert.NotNil(t, request)
+	assert.NotNil(t, request.Params)
+	assert.NotEmpty(t, request.Params)
+	assert.Equal(t, expected, request.Params.Env)
+}
