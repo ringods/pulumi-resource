@@ -8,9 +8,10 @@ import (
 )
 
 type OutParams struct {
-	Sources string     `json:"sources"`
-	Runtime string     `json:"runtime"`
-	Config  config.Map `json:"config"`
+	Sources string            `json:"sources"`
+	Runtime string            `json:"runtime"`
+	Config  config.Map        `json:"config"`
+	Env     map[string]string `json:"env"`
 }
 
 // OutRequest is the struct representing the JSON coming in via stdin on `out` binary

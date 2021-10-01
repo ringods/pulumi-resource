@@ -35,16 +35,17 @@ func (r Runner) deployWithPulumi(req models.OutRequest) (models.OutResponse, err
 	ctx := context.Background()
 	projectName := req.Source.Project
 	stackName := auto.FullyQualifiedStackName(req.Source.Organization, projectName, req.Source.Stack)
+	envVars := req.Params.Env
+	// add common variables besides those specified in env map
+	envVars["PATH"] = req.ExtendPathWithRuntime(r.ConcourseBuildFolder, os.Getenv("PATH"))
+	envVars["PULUMI_ACCESS_TOKEN"] = req.Source.Token
 
 	// initialize a stack from the checked out sources
 	stack, err := auto.UpsertStackLocalSource(
 		ctx,
 		stackName,
 		req.GetSourceLocation(r.ConcourseBuildFolder),
-		auto.EnvVars(map[string]string{
-			"PULUMI_ACCESS_TOKEN": req.Source.Token,
-			"PATH":                req.ExtendPathWithRuntime(r.ConcourseBuildFolder, os.Getenv("PATH")),
-		}),
+		auto.EnvVars(envVars),
 	)
 	if err != nil {
 		return models.OutResponse{}, errors.Wrap(err, "Failed to create the stack")
