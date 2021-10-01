@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        go: [1.15]
+        go: [1.17]
         os: [ubuntu-latest, windows-latest]
         make_target: [build, test]
 
