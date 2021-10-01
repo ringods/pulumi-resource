@@ -2,7 +2,7 @@
 
 A [Concourse](http://concourse-ci.org/) resource type that allows jobs to modify IaaS resources via [Pulumi](https://www.pulumi.com/). This resource will work against the Pulumi hosted platform. Cloud based state storage backends are not supported by this resource.
 
-*NOTE:* This resource is currently under development and might still contain some bugs. Use at least v0.3.1, in combination with a Pulumi 3.x based project. All previous development versions are unsupported.
+*NOTE:* This resource is currently under development and might still contain some bugs. Use at least v0.4.0, in combination with a Pulumi 3.x based project. All previous development versions are unsupported.
 
 ## Community
 
@@ -24,7 +24,7 @@ resource_types:
   type: registry-image
   source:
     repository: ghcr.io/ringods/pulumi-resource
-    tag: v0.3.1
+    tag: v0.4.0
 ```
 
 Concourse will now know about the resource type called `pulumi` in your list of resources.
