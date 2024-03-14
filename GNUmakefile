@@ -6,7 +6,7 @@
 .DEFAULT_GOAL:=help
 SHELL:=/bin/bash
 
-GO = GO111MODULE=on go
+GO = go
 GO_FILES ?= ./pkg/...
 
 all: deps build
