@@ -1,3 +1,9 @@
+> [!IMPORTANT]
+> The resource type is no longer maintained by the author. If you are interested
+> in taking over ownership and continue the development, open an
+> [issue](https://github.com/ringods/pulumi-resource/issues/new) to request transfer 
+> of this repository.
+
 # Pulumi Resource Type for Concourse
 
 A [Concourse](http://concourse-ci.org/) resource type that allows jobs to modify IaaS resources via [Pulumi](https://www.pulumi.com/). This resource will work against the Pulumi hosted platform. Cloud based state storage backends are not supported by this resource.
