@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/pkg/errors"
 	"github.com/pulumi/pulumi/sdk/v3/go/auto"
 	"github.com/pulumi/pulumi/sdk/v3/go/auto/optup"
 	"github.com/ringods/pulumi-resource/pkg/models"
@@ -48,7 +47,7 @@ func (r Runner) deployWithPulumi(req models.OutRequest) (models.OutResponse, err
 		auto.EnvVars(envVars),
 	)
 	if err != nil {
-		return models.OutResponse{}, errors.Wrap(err, "Failed to create the stack")
+		return models.OutResponse{}, err
 	}
 
 	// Set the Pulumi stack configuration. These values are usually in file `Pulumi.<stack>.yaml`
@@ -58,7 +57,7 @@ func (r Runner) deployWithPulumi(req models.OutRequest) (models.OutResponse, err
 	update, err := stack.Up(ctx, optup.ProgressStreams(os.Stderr))
 	if err != nil {
 		// TODO Add the update version here from the UpdateSummary
-		return models.OutResponse{}, errors.Wrap(err, "Failed to run `up`")
+		return models.OutResponse{}, err
 	}
 
 	return models.OutResponse{

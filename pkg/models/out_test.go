@@ -51,7 +51,7 @@ func TestDecodeOutRequestWithFlatParamsListMixedTypes(t *testing.T) {
 
 	expected := config.Map{}
 	expected.Set(config.MustMakeKey("proj", "key1"), config.NewValue("value1"), false)
-	expected.Set(config.MustMakeKey("proj", "key2"), config.NewObjectValue("2"), false)
+	expected.Set(config.MustMakeKey("proj", "key2"), config.NewValue("2"), false)
 
 	assert.NotNil(t, request)
 	assert.NotNil(t, request.Params)
